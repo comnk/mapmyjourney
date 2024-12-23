@@ -1,5 +1,5 @@
 // /app/layout.tsx
-import './styles/globals.css';  // Add any global styles here
+import './globals.css';  // Add any global styles here
 
 export const metadata = {
     title: 'Travel Planner',
