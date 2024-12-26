@@ -10,7 +10,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
-    name: "",
+    name: "", // Only used for registration
   });
   const [error, setError] = useState<string | null>(null);
 
@@ -30,17 +30,21 @@ export default function AuthForm({ mode }: AuthFormProps) {
       });
 
       if (result?.error) {
-        setError(result.error);
+        setError("Invalid email or password. Please try again.");
       } else {
         setError(null);
-        alert("Login successful!");
+        window.location.href = "/dashboard"; // Redirect to dashboard
       }
     } else {
       try {
-        const response = await fetch("/api/auth/signup", {
+        const response = await fetch("/api/auth/register", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
+          body: JSON.stringify({
+            email: formData.email,
+            password: formData.password,
+            name: formData.name,
+          }),
         });
 
         const data = await response.json();
@@ -49,7 +53,8 @@ export default function AuthForm({ mode }: AuthFormProps) {
           setError(data.error);
         } else {
           setError(null);
-          alert("Signup successful! You can now log in.");
+          alert("Signup successful! Redirecting to login...");
+          window.location.href = "/auth/login"; // Redirect to login page
         }
       } catch (err) {
         setError("Something went wrong. Please try again.");
@@ -109,4 +114,4 @@ export default function AuthForm({ mode }: AuthFormProps) {
       </p>
     </div>
   );
-};
+}
