@@ -6,14 +6,17 @@ export default function Navbar() {
 
   return (
     <nav>
-      <Link href="/">Home</Link>
       {session ? (
         <>
+          <Link href="/dashboard">Home</Link>
           <span>Welcome, {session.user?.name}</span>
           <button onClick={() => signOut()}>Log Out</button>
         </>
       ) : (
-        <Link href="/auth/login">Log In</Link>
+        <>
+          <Link href="/">Home</Link>
+          <Link href="/auth/login">Log In</Link>
+        </>
       )}
     </nav>
   );
