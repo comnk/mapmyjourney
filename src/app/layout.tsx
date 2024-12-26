@@ -1,21 +1,20 @@
-// /app/layout.tsx
-import './globals.css';  // Add any global styles here
+import { metadata } from './client-layout'; // We will use metadata from a client-side component
+import ClientLayout from './client-layout';
 
-export const metadata = {
-    title: 'Travel Planner',
-    description: 'Plan your dream trip!',
-  };
-  
-  export default function RootLayout({
-    children,
-  }: {
-    children: React.ReactNode;
-  }) {
-    console.log("Layout rendered"); // Debugging log
-    return (
-      <html lang="en">
-        <body>{children}</body>
-      </html>
-    );
-  }
-  
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  console.log("Layout rendered"); // Debugging log
+
+  return (
+    <html lang="en">
+      <body>
+        <ClientLayout>
+          {children}
+        </ClientLayout>
+      </body>
+    </html>
+  );
+}
