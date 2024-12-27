@@ -101,7 +101,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
         <button type="submit">{mode === "login" ? "Login" : "Register"}</button>
       </form>
       <>
-        Forgot password? <Link href="/">Click here</Link>
+        Forgot password? <Link href="/auth/forgot-password">Click here</Link>
       </>
       {error && <p style={{ color: "red" }}>{error}</p>}
       <p>
