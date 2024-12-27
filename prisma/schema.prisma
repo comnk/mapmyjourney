@@ -14,13 +14,25 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement()) // PostgreSQL auto-incrementing primary key
-  name      String?
-  email     String   @unique
-  password  String
-  resetToken        String?
-  resetTokenExpires DateTime?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                 Int       @id @default(autoincrement()) // Primary key
+  name               String?   // Optional user name
+  email              String    @unique
+  password           String    // Password (hashed)
+  resetToken         String?   // For password reset functionality
+  resetTokenExpires  DateTime? // Expiry for reset token
+  profilePicture     String?   // Optional profile picture URL
+  timeZone           String?   // User's preferred time zone
+  currency           String?   // User's preferred currency
+  travelPreferences  TravelPreferences?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
 }
 
+model TravelPreferences {
+  id            Int      @id @default(autoincrement())
+  userId        Int      @unique // One-to-one relationship with User
+  user          User     @relation(fields: [userId], references: [id])
+  travelPace    String?  // relaxed, moderate, fast-paced
+  activityTypes String?  // e.g., "cultural, adventure, food"
+  budgetRange   String?  // e.g., "low, medium, luxury"
+}
