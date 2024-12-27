@@ -21,12 +21,19 @@ export async function POST(req: Request) {
       );
     }
 
+    // Debugging: Log the incoming token and password
+    console.log("Received token:", token);
+    console.log("Finding user with token:", token.trim());
+
     const user = await prisma.user.findFirst({
       where: {
         resetToken: token.trim(),
-        resetTokenExpires: { gte: new Date() }
+        resetTokenExpires: { gte: new Date() }, // Token should not be expired
       },
     });
+
+    // Debugging: Log the user found
+    console.log("User found:", user);
 
     if (!user) {
       return new Response(
@@ -35,8 +42,10 @@ export async function POST(req: Request) {
       );
     }
 
+    // Hash the new password
     const hashedPassword = await bcrypt.hash(password.trim(), 10);
 
+    // Update the user record: clear the token and set the new password
     await prisma.user.update({
       where: { email: user.email },
       data: {

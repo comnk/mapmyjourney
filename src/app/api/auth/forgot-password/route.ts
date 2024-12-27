@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import nodemailer from "nodemailer";
-import bcrypt from "bcryptjs";
+import crypto from "crypto";
 
 const prisma = new PrismaClient();
 
@@ -29,8 +29,8 @@ export async function POST(req: Request) {
       );
     }
 
-    // Generate a reset token
-    const resetToken = bcrypt.hashSync(user.email + Date.now().toString(), 10);
+    // Generate a cryptographically secure reset token
+    const resetToken = crypto.randomBytes(32).toString("hex");
 
     // Update the user with the reset token and expiration time
     await prisma.user.update({
@@ -51,10 +51,12 @@ export async function POST(req: Request) {
     });
 
     // Send the reset email
+    const resetURL = `${process.env.NEXTAUTH_URL}/auth/reset-password?token=${resetToken}`;
     await transporter.sendMail({
       to: email,
       subject: "Password Reset",
-      text: `Click the link to reset your password: ${process.env.NEXTAUTH_URL}/auth/reset-password?token=${resetToken}`,
+      text: `Click the link to reset your password: ${resetURL}`,
+      html: `<p>Click the link to reset your password:</p><a href="${resetURL}">${resetURL}</a>`,
     });
 
     // Return a success message
