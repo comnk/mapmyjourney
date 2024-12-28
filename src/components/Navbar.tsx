@@ -10,6 +10,7 @@ export default function Navbar() {
         <>
           <Link href="/dashboard">Home</Link>
           <span>Welcome, {session.user?.name}</span>
+          <Link href="/profile">Profile</Link>
           <button onClick={() => signOut()}>Log Out</button>
         </>
       ) : (
