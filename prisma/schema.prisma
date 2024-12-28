@@ -26,6 +26,7 @@ model User {
   travelPreferences  TravelPreferences?
   createdAt          DateTime  @default(now())
   updatedAt          DateTime  @updatedAt
+  itineraries        Itinerary[]
 }
 
 model TravelPreferences {
@@ -35,4 +36,30 @@ model TravelPreferences {
   travelPace    String?  // relaxed, moderate, fast-paced
   activityTypes String?  // e.g., "cultural, adventure, food"
   budgetRange   String?  // e.g., "low, medium, luxury"
+}
+
+model Itinerary {
+  id            Int       @id @default(autoincrement()) // Primary key
+  title         String
+  startDate     DateTime
+  endDate       DateTime
+  userId        Int                      // Foreign key to associate the itinerary with a user
+  user          User      @relation(fields: [userId], references: [id])
+  destinations  Destination[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Destination {
+  id            Int       @id @default(autoincrement()) // Primary key
+  name          String
+  startTime     DateTime
+  endTime       DateTime
+  location      String
+  notes         String?
+  order         Int
+  itineraryId   Int
+  itinerary     Itinerary @relation(fields: [itineraryId], references: [id])
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 }
